@@ -1,0 +1,85 @@
+
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .sidebar {
+      min-height: 100vh;
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .sidebar h4 {
+      padding: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      color: #adb5bd;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover, .sidebar .active {
+      background-color: #495057;
+      color: #fff;
+    }
+
+    .card {
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card-expense {
+      background-color: #dc3545;
+    }
+
+    .card-income {
+      background-color: #198754;
+    }
+
+    .card-profit {
+      background-color: #0d6efd;
+    }
+
+    .table-responsive {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        min-height: auto;
+      }
+    }
+
+  
+   
+    .card-employees {
+      background-color: #0d6efd;
+      color: #fff;
+    }
+
+   
+     
+   
+    .card-salary {
+      background-color: #6f42c1;
+      color: #fff;
+    }
+  
+   
+    /* .card-expense {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .card-income {
+      background-color: #198754;
+      color: #fff;
+    }
+    .card-profit {
+      background-color: #0d6efd;
+      color: #fff;
+    } */

@@ -1,0 +1,64 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+      <!-- Main Content -->
+      <main class="col-md-10 col-12 p-4">
+        <h2 class="mb-4">Employees Dashboard</h2>
+
+        <!-- Summary Card -->
+        <div class="row mb-4">
+          <div class="col-12 col-md-4">
+            <div class="card card-employees text-center p-3">
+              <h5>Total Employees</h5>
+              <h3 id="totalEmployees">{{ total_employees }}</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Employee Form -->
+        <div class="card p-4 mb-4">
+          <h5>Add New Employee</h5>
+         <form method="POST" class="row g-3">
+  {% csrf_token %}
+  <div class="col-md-3">
+    <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+  </div>
+  <div class="col-md-3">
+    <input type="text" name="position" class="form-control" placeholder="Position" required>
+  </div>
+  <div class="col-md-3">
+    <input type="email" name="email" class="form-control" placeholder="Email" required>
+  </div>
+  <div class="col-md-3">
+    <button type="submit" class="btn btn-primary w-100">Add Employee</button>
+  </div>
+</form>
+        </div>
+
+        <!-- Employee List -->
+        <div class="card p-4">
+          <h5 class="mb-3">Employee List</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered" id="employeeTable">
+              <thead class="table-light">
+                 {% for emp in employees %}
+                <tr>
+                  <th>{{ forloop.counter }}</th>
+                  <th>{{ emp.name }}</th>
+                  <th>{{ emp.position }}</th>
+                  <th>{{ emp.email }}</th>
+                </tr>
+                 {% endfor %}
+              </thead>
+              <tbody id="employeeBody">
+                <!-- Rows will be added by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+ {% endblock %}

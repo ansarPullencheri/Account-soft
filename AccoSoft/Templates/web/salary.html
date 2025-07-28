@@ -1,0 +1,61 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+      <!-- Main Content -->
+      <main class="col-md-10 col-12 p-4">
+        <h2 class="mb-4">Salary Dashboard</h2>
+
+        <!-- Summary Card -->
+        <div class="row mb-4">
+          <div class="col-12 col-md-4">
+            <div class="card card-salary text-center p-3">
+              <h5>Total Salary Paid</h5>
+              <h3 id="totalSalary">€0.00</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Salary Form -->
+        <div class="card p-4 mb-4">
+          <h5>Record Salary Payment</h5>
+          <form id="salaryForm" class="row g-3">
+            <div class="col-md-3">
+              <input type="text" id="empName" class="form-control" placeholder="Employee Name" required>
+            </div>
+            <div class="col-md-3">
+              <input type="month" id="salaryMonth" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+              <input type="number" id="salaryAmount" class="form-control" placeholder="Amount (€)" required>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary w-100">Add Salary</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Salary History Table -->
+        <div class="card p-4">
+          <h5 class="mb-3">Salary History</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered" id="salaryTable">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Employee Name</th>
+                  <th>Month</th>
+                  <th>Amount (€)</th>
+                </tr>
+              </thead>
+              <tbody id="salaryBody">
+                <!-- Rows will be added by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+{% endblock  %}

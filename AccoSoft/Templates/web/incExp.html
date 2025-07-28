@@ -1,0 +1,178 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% csrf_token %}
+{% block content %}
+
+    <!-- Main Content -->
+    <main class="col-md-10 col-12 p-4">
+      <h2 class="mb-4">Expenses & Income Dashboard</h2>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-12 col-md-4">
+          <div class="card card-expense text-center p-3">
+            <h5>Total Expenses</h5>
+            <h3 id="totalExpenses">€{{ expense_total|floatformat:2 }}</h3>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card card-income text-center p-3">
+            <h5>Total Income</h5>
+            <h3 id="totalIncome">€{{ income_total|floatformat:2 }}</h3>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card card-profit text-center p-3">
+            <h5>Total Profit</h5>
+            <h3 id="totalProfit" style="color: {{ profit|floatformat:2|add:'0'|floatformat:0|yesno:'green,red' }}">€{{ profit|floatformat:2 }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Expense Form -->
+      <div class="card p-4 mb-4">
+        <h5>Add New Expense</h5>
+        <form method="POST" class="row g-3">
+  {% csrf_token %}
+  <input type="hidden" name="form_type" value="expense">
+  <div class="col-md-4">
+    <input type="text" name="desc" class="form-control" placeholder="Expense Description" required>
+  </div>
+  <div class="col-md-4">
+    <input type="number" name="amount" class="form-control" placeholder="Amount (€)" required>
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-danger w-100">Add Expense</button>
+  </div>
+</form>
+      </div>
+
+      <!-- Add Income Form -->
+      <div class="card p-4 mb-4">
+        <h5>Add New Income</h5>
+        <form method="POST" class="row g-3 mt-4">
+  {% csrf_token %}
+  <input type="hidden" name="form_type" value="income">
+  <div class="col-md-4">
+    <input type="text" name="desc" class="form-control" placeholder="Income Description" required>
+  </div>
+  <div class="col-md-4">
+    <input type="number" name="amount" class="form-control" placeholder="Amount (€)" required>
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-success w-100">Add Income</button>
+  </div>
+</form>
+      </div>
+
+      <!-- Expense List -->
+      <div class="card p-4 mb-4">
+        <h5 class="mb-3">Expense List</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="expenseTable">
+            <thead class="table-light">
+              {% for e in expenses %}
+              <tr>
+                <th>{{ forloop.counter }}</th>
+                <th>{{ e.description }}</th>
+                <th>€{{ e.amount|floatformat:2 }}</th>
+              </tr>
+                {% endfor %}
+            </thead>
+            <tbody id="expenseBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Income List -->
+      <div class="card p-4">
+        <h5 class="mb-3">Income List</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="incomeTable">
+            <thead class="table-light">
+              {% for i in incomes %}
+              <tr>
+                <th>{{ forloop.counter }}</th>
+                <th>{{ i.description }}</th>
+                <th>€{{ i.amount|floatformat:2 }}</th>
+              </tr>
+                {% endfor %}
+            </thead>
+            <tbody id="incomeBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let expenseTotal = 0;
+    let incomeTotal = 0;
+    let expenseCount = 0;
+    let incomeCount = 0;
+
+    // Expense Form Submission
+    document.getElementById("expenseForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const desc = document.getElementById("expenseDesc").value.trim();
+      const amount = parseFloat(document.getElementById("expenseAmount").value);
+      if (!desc || isNaN(amount) || amount <= 0) return;
+
+      expenseCount++;
+      expenseTotal += amount;
+
+      // Add to Expense Table
+      const row = `<tr>
+        <td>${expenseCount}</td>
+        <td>${desc}</td>
+        <td>€${amount.toFixed(2)}</td>
+      </tr>`;
+      document.getElementById("expenseBody").innerHTML += row;
+
+      // Update total
+      document.getElementById("totalExpenses").innerText = `€${expenseTotal.toFixed(2)}`;
+      updateProfit();
+
+      this.reset();
+    });
+
+    // Income Form Submission
+    document.getElementById("incomeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const desc = document.getElementById("incomeDesc").value.trim();
+      const amount = parseFloat(document.getElementById("incomeAmount").value);
+      if (!desc || isNaN(amount) || amount <= 0) return;
+
+      incomeCount++;
+      incomeTotal += amount;
+
+      // Add to Income Table
+      const row = `<tr>
+        <td>${incomeCount}</td>
+        <td>${desc}</td>
+        <td>€${amount.toFixed(2)}</td>
+      </tr>`;
+      document.getElementById("incomeBody").innerHTML += row;
+
+      // Update total
+      document.getElementById("totalIncome").innerText = `€${incomeTotal.toFixed(2)}`;
+      updateProfit();
+
+      this.reset();
+    });
+
+    // Update profit
+    function updateProfit() {
+      const profit = incomeTotal - expenseTotal;
+      const profitElem = document.getElementById("totalProfit");
+      profitElem.innerText = `€${profit.toFixed(2)}`;
+      profitElem.style.color = profit >= 0 ? 'green' : 'red';
+    }
+  });
+</script>
+{% endblock %}

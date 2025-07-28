@@ -1,0 +1,140 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+      
+
+      <!-- Main Content -->
+      <main class="col-md-10 col-12 p-4">
+        <h2 class="mb-4">Account Dashboard</h2>
+
+        <!-- Cards -->
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <div class="card card-expense text-center">
+              <h5>Expense [Current Month]</h5>
+              <h3 id="expenseCard">€{{ monthly_expense|floatformat:2 }}</h3>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card card-income text-center">
+              <h5>Income [Current Month]</h5>
+              <h3 id="incomeCard">€{{ monthly_income|floatformat:2 }}</h3>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card card-profit text-center">
+              <h5>Profit [Current Month]</h5>
+              <h3 id="profitCard">€{{ monthly_profit|floatformat:2 }}</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Table -->
+        <div class="card bg-white text-dark p-4">
+          <h5 class="mb-3">Monthly Financial Overview</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                 {% for item in monthly_data %}
+                <tr>
+                  <th>{{ item.month }}</th>
+                  <th>€{{ item.income|floatformat:2 }}</th>
+                  <th>€{{ item.expense|floatformat:2 }}</th>
+                  <th class="{% if item.profit >= 0 %}text-success{% else %}text-danger{% endif %}">
+      {% if item.profit >= 0 %}+{% endif %}€{{ item.profit|floatformat:2 }}</th>
+                  <th><span class="badge 
+        {% if item.status == 'No Activity' %}bg-secondary
+        {% elif item.status == 'Profit' %}bg-success
+        {% else %}bg-danger{% endif %}">
+        {{ item.status }}
+      </span></th>
+                </tr>
+                 {% endfor %}
+              </thead>
+              <tbody>
+                <tr>
+                  <td>January</td>
+                  <td>€0.00</td>
+                  <td>€0.00</td>
+                  <td class="text-success">+€0.00</td>
+                  <td><span class="badge bg-secondary">No Activity</span></td>
+                </tr>
+                <tr>
+                  <td>February</td>
+                  <td>€0.00</td>
+                  <td>€0.00</td>
+                  <td class="text-success">+€0.00</td>
+                  <td><span class="badge bg-secondary">No Activity</span></td>
+                </tr>
+                <tr>
+                  <td>March</td>
+                  <td>€0.00</td>
+                  <td>€0.00</td>
+                  <td class="text-success">+€0.00</td>
+                  <td><span class="badge bg-secondary">No Activity</span></td>
+                </tr>
+                <tr>
+                  <td>April</td>
+                  <td>€0.00</td>
+                  <td>€0.00</td>
+                  <td class="text-success">+€0.00</td>
+                  <td><span class="badge bg-secondary">No Activity</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- All Time Cards -->
+        <div class="row mt-4">
+          <div class="col-12 col-md-4">
+            <div class="card card-expense text-center">
+              <h5>Expense [All Time]</h5>
+              <h3>€{{ total_expense|floatformat:2 }}</h3>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card card-income text-center">
+              <h5>Income [All Time]</h5>
+              <h3>€{{ total_income|floatformat:2 }}</h3>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card card-profit text-center">
+              <h5>Profit [All Time]</h5>
+              <h3>€{{ total_profit|floatformat:2 }}</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transaction Form -->
+        <div class="card bg-white p-4 mt-4">
+          <h5>Add Transaction</h5>
+          <form id="transactionForm" class="row g-3">
+             {% csrf_token %}
+            <div class="col-md-4">
+              <input type="text" id="desc" class="form-control" placeholder="Description" required>
+            </div>
+            <div class="col-md-3">
+              <input type="number" id="amount" class="form-control" placeholder="Amount" required>
+            </div>
+            <div class="col-md-3">
+              <select id="type" class="form-select">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary w-100">Add</button>
+            </div>
+          </form>
+          <div class="mt-3" id="transactionList"></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+{% endblock %}
+ 
